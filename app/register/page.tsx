@@ -4,16 +4,6 @@ import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Alert,
-  Card,
-  Spinner,
-} from "react-bootstrap";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
@@ -53,116 +43,120 @@ export default function RegisterPage() {
   };
 
   return (
-    <div
-      style={{ minHeight: "100vh", width: "100vw" }}
-      className="d-flex align-items-center justify-content-center bg-light"
-    >
-      <Container fluid="md" className="mx-3">
-        <Row className="justify-content-center">
-          <Col xs={12} sm={10} md={8} lg={6} xl={4}>
-            <Card className="shadow">
-              <Card.Body className="p-4">
-                <h2 className="text-center mb-4">Create Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
+            Create Account
+          </h2>
 
-                <Form onSubmit={handleSubmit}>
-                  {(error || passwordError) && (
-                    <Alert variant="danger" className="mb-4">
-                      {error || passwordError}
-                    </Alert>
-                  )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {(error || passwordError) && (
+              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error || passwordError}
+              </div>
+            )}
 
-                  {success && (
-                    <Alert variant="success" className="mb-4">
-                      {success}
-                    </Alert>
-                  )}
+            {success && (
+              <div className="bg-green-50 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {success}
+              </div>
+            )}
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Full Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      placeholder="Enter your full name"
-                      disabled={loading}
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Enter your full name"
+                disabled={loading}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="Enter email"
-                      disabled={loading}
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Enter email"
+                disabled={loading}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="Password"
-                      disabled={loading}
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Password"
+                disabled={loading}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
 
-                  <Form.Group className="mb-4">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      placeholder="Confirm password"
-                      disabled={loading}
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                placeholder="Confirm password"
+                disabled={loading}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
 
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={loading}
-                    className="w-100 mb-3"
-                  >
-                    {loading ? (
-                      <>
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                          className="me-2"
-                        />
-                        Creating account...
-                      </>
-                    ) : (
-                      "Sign Up"
-                    )}
-                  </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating account...
+                </>
+              ) : (
+                "Sign Up"
+              )}
+            </button>
 
-                  <div className="text-center">
-                    <Link
-                      href="/login"
-                      className="text-decoration-none"
-                      tabIndex={loading ? -1 : 0}
-                    >
-                      Already have an account? Sign In
-                    </Link>
-                  </div>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+            <div className="text-center">
+              <Link
+                href="/login"
+                className="text-sm text-blue-600 hover:text-blue-500"
+                tabIndex={loading ? -1 : 0}
+              >
+                Already have an account? Sign In
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

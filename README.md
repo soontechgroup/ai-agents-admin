@@ -48,7 +48,7 @@ The application is built with:
 - Next.js 14
 - React 18
 - TypeScript
-- Bootstrap 5
+- Tailwind CSS
 - Context API for state management
 
 ### Available Scripts

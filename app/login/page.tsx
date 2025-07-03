@@ -4,15 +4,6 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Alert,
-  Card,
-} from "react-bootstrap";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
@@ -32,66 +23,66 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-      style={{ minHeight: "100vh", width: "100vw" }}
-      className="d-flex align-items-center justify-content-center bg-light"
-    >
-      <Container fluid="md" className="mx-3">
-        <Row className="justify-content-center">
-          <Col xs={12} sm={10} md={8} lg={6} xl={4}>
-            <Card className="shadow">
-              <Card.Body className="p-4">
-                <h2 className="text-center mb-4">Sign In</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
+            Sign In
+          </h2>
 
-                <Form onSubmit={handleSubmit}>
-                  {error && (
-                    <Alert variant="danger" className="mb-4">
-                      {error}
-                    </Alert>
-                  )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="Enter email"
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Enter email"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
 
-                  <Form.Group className="mb-4">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="Password"
-                    />
-                  </Form.Group>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Password"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
 
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={loading}
-                    className="w-100 mb-3"
-                  >
-                    {loading ? "Signing in..." : "Sign In"}
-                  </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
 
-                  <div className="text-center">
-                    <Link href="/register" className="text-decoration-none">
-                      Don't have an account? Sign Up
-                    </Link>
-                  </div>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+            <div className="text-center">
+              <Link href="/register" className="text-sm text-blue-600 hover:text-blue-500">
+                Don't have an account? Sign Up
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
