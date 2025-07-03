@@ -1,14 +1,16 @@
-import { useAuth } from "../context/useAuth";
-import { useNavigate } from "react-router-dom";
+'use client'
+
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 import { Container, Navbar, Button, Card } from "react-bootstrap";
 
-export default function Home() {
+export default function HomePage() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    router.push("/login");
   };
 
   return (

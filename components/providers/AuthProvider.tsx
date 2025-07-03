@@ -1,6 +1,8 @@
+'use client'
+
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { AuthContext, type User } from "./context";
+import { AuthContext, type User } from "@/lib/auth-context";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -12,7 +14,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, []);
 
-  // Clear messages after 5 seconds
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(() => {
@@ -42,11 +43,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
+        // Set cookie for middleware
+        document.cookie = `token=${token}; path=/; max-age=86400`;
       } else {
         localStorage.removeItem("token");
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
     } catch {
       localStorage.removeItem("token");
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
   };
 
@@ -71,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       localStorage.setItem("token", data.access_token);
+      document.cookie = `token=${data.access_token}; path=/; max-age=86400`;
       setUser(data.user);
       setSuccess("Successfully logged in!");
     } catch (err) {
@@ -105,8 +111,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       localStorage.setItem("token", data.access_token);
+      document.cookie = `token=${data.access_token}; path=/; max-age=86400`;
       setSuccess("Account created successfully! Welcome aboard!");
-      await checkAuth(); // Fetch user data after registration
+      await checkAuth();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
       throw err;
@@ -117,6 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem("token");
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setUser(null);
     setSuccess("Logged out successfully!");
   };

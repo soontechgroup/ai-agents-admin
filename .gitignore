@@ -36,4 +36,9 @@ lerna-debug.log*
 
 # Build files
 *.tsbuildinfo
-**/.eslintcache 
+**/.eslintcache
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts 

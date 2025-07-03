@@ -1,6 +1,9 @@
+'use client'
+
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Container,
   Row,
@@ -11,29 +14,27 @@ import {
   Card,
   Spinner,
 } from "react-bootstrap";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
-export default function Register() {
+export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const { register, error, success, loading, resetMessages } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
-  // Reset messages when component mounts
   useEffect(() => {
     resetMessages();
   }, [resetMessages]);
 
-  // Navigate after successful registration
   useEffect(() => {
     if (success) {
-      const timer = setTimeout(() => navigate("/"), 1500);
+      const timer = setTimeout(() => router.push("/"), 1500);
       return () => clearTimeout(timer);
     }
-  }, [success, navigate]);
+  }, [success, router]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -149,7 +150,7 @@ export default function Register() {
 
                   <div className="text-center">
                     <Link
-                      to="/login"
+                      href="/login"
                       className="text-decoration-none"
                       tabIndex={loading ? -1 : 0}
                     >

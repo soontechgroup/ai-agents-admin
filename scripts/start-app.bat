@@ -16,9 +16,9 @@ for /f "tokens=1,2,3 delims=." %%a in ('node -v') do (
     set NODE_VER=%%a
     set NODE_VER=!NODE_VER:~1!
 )
-if !NODE_VER! lss 18 (
-    echo Error: Node.js version must be 18 or higher
-    echo Current version: !NODE_VER!
+if !NODE_VER! lss 20 (
+    echo Error: Node.js version must be 20 or higher
+    echo Current version: v!NODE_VER!
     exit /b 1
 )
 
@@ -29,16 +29,13 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-:: Check if port 5173 is available
-netstat -ano | findstr :5173 >nul
+:: Check if port 3000 is available
+netstat -ano | findstr :3000 >nul
 if %ERRORLEVEL% equ 0 (
-    echo Error: Port 5173 is already in use
-    echo Please free up port 5173 and try again
+    echo Error: Port 3000 is already in use
+    echo Please free up port 3000 and try again
     exit /b 1
 )
-
-:: Navigate to frontend directory
-cd frontend
 
 :: Check if node_modules exists
 if not exist node_modules\ (
@@ -53,7 +50,8 @@ if not exist node_modules\ (
 )
 
 :: Start the development server
-echo Starting development server...
+echo Starting Next.js development server...
+echo The application will be available at http://localhost:3000
 call npm run dev
 
 endlocal 

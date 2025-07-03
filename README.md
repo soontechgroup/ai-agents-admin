@@ -4,7 +4,7 @@ This repository contains the admin interface for managing AI agents.
 
 ## Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v20 or higher)
 - npm (v9 or higher)
 - Git
 
@@ -27,55 +27,51 @@ chmod +x scripts/start-app.sh
 
 ### Manual Setup
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Start the development server:
+2. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Open your browser and visit:
+3. Open your browser and visit:
    ```
-   http://localhost:5173
+   http://localhost:3000
    ```
 
 ## Development
 
-The frontend is built with:
+The application is built with:
+- Next.js 14
 - React 18
 - TypeScript
-- Vite
+- Bootstrap 5
 - Context API for state management
 
 ### Available Scripts
 
-In the frontend directory, you can run:
-
 - `npm run dev` - Starts the development server
 - `npm run build` - Builds the app for production
+- `npm run start` - Runs the production build
 - `npm run lint` - Runs the linter
-- `npm run preview` - Preview the production build locally
 
 ## Project Structure
 
 ```
 ai-agents-admin/
-├── frontend/          # React frontend application
-│   ├── src/
-│   │   ├── assets/   # Static assets
-│   │   ├── context/  # React Context providers
-│   │   ├── pages/    # Page components
-│   │   └── ...
-│   └── ...
-└── scripts/          # Startup and utility scripts
+├── app/              # Next.js App Router pages
+│   ├── layout.tsx   # Root layout
+│   ├── page.tsx     # Home page
+│   ├── login/       # Login page
+│   └── register/    # Register page
+├── components/      # React components
+│   └── providers/   # Context providers
+├── hooks/           # Custom React hooks
+├── lib/             # Utility functions and types
+└── scripts/         # Startup and utility scripts
 ```
 
 ## Troubleshooting
@@ -85,4 +81,4 @@ If you encounter any issues:
 1. Make sure you have the correct Node.js version installed
 2. Clear your npm cache: `npm cache clean --force`
 3. Delete `node_modules` and `package-lock.json`, then run `npm install` again
-4. Check if all required ports are available (default: 5173)
+4. Check if all required ports are available (default: 3000)

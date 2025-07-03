@@ -1,6 +1,9 @@
+'use client'
+
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Container,
   Row,
@@ -10,19 +13,19 @@ import {
   Alert,
   Card,
 } from "react-bootstrap";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
-export default function Login() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, loading } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/");
+      router.push("/");
     } catch {
       // Error is handled in the auth context
     }
@@ -79,7 +82,7 @@ export default function Login() {
                   </Button>
 
                   <div className="text-center">
-                    <Link to="/register" className="text-decoration-none">
+                    <Link href="/register" className="text-decoration-none">
                       Don't have an account? Sign Up
                     </Link>
                   </div>

@@ -11,9 +11,9 @@ fi
 
 # Check Node.js version
 NODE_VERSION=$(node -v | cut -d "v" -f 2 | cut -d "." -f 1)
-if [ "$NODE_VERSION" -lt 18 ]; then
-    echo "Error: Node.js version must be 18 or higher"
-    echo "Current version: $NODE_VERSION"
+if [ "$NODE_VERSION" -lt 20 ]; then
+    echo "Error: Node.js version must be 20 or higher"
+    echo "Current version: $(node -v)"
     exit 1
 fi
 
@@ -23,23 +23,20 @@ if ! command -v npm &> /dev/null; then
     exit 1
 fi
 
-# Check if port 5173 is available
+# Check if port 3000 is available
 if command -v lsof &> /dev/null; then
-    if lsof -i :5173 &> /dev/null; then
-        echo "Error: Port 5173 is already in use"
-        echo "Please free up port 5173 and try again"
+    if lsof -i :3000 &> /dev/null; then
+        echo "Error: Port 3000 is already in use"
+        echo "Please free up port 3000 and try again"
         exit 1
     fi
 elif command -v netstat &> /dev/null; then
-    if netstat -tuln | grep ":5173" &> /dev/null; then
-        echo "Error: Port 5173 is already in use"
-        echo "Please free up port 5173 and try again"
+    if netstat -tuln | grep ":3000" &> /dev/null; then
+        echo "Error: Port 3000 is already in use"
+        echo "Please free up port 3000 and try again"
         exit 1
     fi
 fi
-
-# Navigate to frontend directory
-cd frontend || exit 1
 
 # Check if node_modules exists
 if [ ! -d "node_modules" ]; then
@@ -53,5 +50,6 @@ else
 fi
 
 # Start the development server
-echo "Starting development server..."
+echo "Starting Next.js development server..."
+echo "The application will be available at http://localhost:3000"
 npm run dev 
