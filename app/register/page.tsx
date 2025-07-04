@@ -1,13 +1,14 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,14 +16,22 @@ export default function RegisterPage() {
   const { register, error, success, loading, resetMessages } = useAuth();
   const router = useRouter();
 
+  // Debug success state changes
+  useEffect(() => {
+    console.log("Success state changed:", success);
+  }, [success]);
+
   useEffect(() => {
     resetMessages();
   }, [resetMessages]);
 
   useEffect(() => {
     if (success) {
-      const timer = setTimeout(() => router.push("/"), 1500);
-      return () => clearTimeout(timer);
+      console.log(
+        "Registration successful, redirecting to login with success message..."
+      );
+      // Redirect immediately with success message
+      router.push("/login?success=registered");
     }
   }, [success, router]);
 
@@ -30,14 +39,50 @@ export default function RegisterPage() {
     e.preventDefault();
     setPasswordError("");
 
+    // Client-side validation
+    if (!username.trim()) {
+      setPasswordError("Username is required");
+      return;
+    }
+
+    if (username.length < 3 || username.length > 50) {
+      setPasswordError("Username must be between 3 and 50 characters");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+      setPasswordError(
+        "Username can only contain letters, numbers, underscores, and hyphens"
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setPasswordError("Passwords do not match");
       return;
     }
 
+    if (!email.trim()) {
+      setPasswordError("Email is required");
+      return;
+    }
+
     try {
-      await register(name, email, password);
-    } catch {
+      console.log("Submitting registration form with:", {
+        username,
+        email,
+        fullName,
+        passwordLength: password.length,
+      });
+
+      await register(username, email, password, fullName);
+    } catch (error) {
+      console.error("Registration form error:", error);
       // Error is handled in the auth context
     }
   };
@@ -59,20 +104,60 @@ export default function RegisterPage() {
 
             {success && (
               <div className="bg-green-50 border border-green-400 text-green-700 px-4 py-3 rounded">
-                {success}
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg
+                      className="h-5 w-5 text-green-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">
+                      {success}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Username
               </label>
               <input
-                id="name"
+                id="username"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
+                placeholder="Enter username (3-50 characters, letters, numbers, underscore, hyphen only)"
+                disabled={loading}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full Name (Optional)
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter your full name"
                 disabled={loading}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -80,7 +165,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -96,7 +184,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -105,14 +196,17 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                placeholder="Password"
+                placeholder="Password (minimum 6 characters)"
                 disabled={loading}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Confirm Password
               </label>
               <input
@@ -134,9 +228,25 @@ export default function RegisterPage() {
             >
               {loading ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Creating account...
                 </>

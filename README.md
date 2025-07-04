@@ -4,9 +4,17 @@ This repository contains the admin interface for managing AI agents.
 
 ## Prerequisites
 
-- Node.js (v20 or higher)
+- Node.js (v18 or higher)
 - npm (v9 or higher)
 - Git
+
+## Environment Setup
+
+Create a `.env.local` file in the root directory with the following content:
+
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
 
 ## Quick Start
 

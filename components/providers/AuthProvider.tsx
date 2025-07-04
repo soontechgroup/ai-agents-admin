@@ -1,8 +1,14 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { AuthContext, type User } from "@/lib/auth-context";
+import {
+  AuthContext,
+  type User,
+  type BackendResponse,
+  type LoginResponse,
+} from "../../lib/auth-context";
+import { API_ENDPOINTS } from "../../lib/api-config";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -34,20 +40,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!token) return;
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/auth/me", {
+      const response = await fetch(API_ENDPOINTS.auth.me, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
+        const data: BackendResponse<User> = await response.json();
+        setUser(data.data);
         // Set cookie for middleware
         document.cookie = `token=${token}; path=/; max-age=86400`;
       } else {
         localStorage.removeItem("token");
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie =
+          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
     } catch {
       localStorage.removeItem("token");
@@ -55,30 +62,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (username: string, password: string) => {
     try {
       setLoading(true);
       setError(null);
       setSuccess(null);
 
-      const response = await fetch("http://localhost:8000/api/v1/auth/login", {
+      const response = await fetch(API_ENDPOINTS.auth.login, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      const data: BackendResponse<LoginResponse> = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error?.detail || "Invalid credentials");
+      if (!response.ok || data.code !== 200) {
+        throw new Error(data.message || "Invalid credentials");
       }
 
-      localStorage.setItem("token", data.access_token);
-      document.cookie = `token=${data.access_token}; path=/; max-age=86400`;
-      setUser(data.user);
-      setSuccess("Successfully logged in!");
+      localStorage.setItem("token", data.data.access_token);
+      document.cookie = `token=${data.data.access_token}; path=/; max-age=86400`;
+      await checkAuth();
+      setSuccess(data.message || "Successfully logged in!");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
       throw err;
@@ -87,33 +94,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+    full_name?: string
+  ) => {
     try {
       setLoading(true);
       setError(null);
       setSuccess(null);
 
-      const response = await fetch(
-        "http://localhost:8000/api/v1/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, password }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error?.detail || "Registration failed");
+      // Only include full_name if it's not empty
+      const payload: any = { username, email, password };
+      if (full_name && full_name.trim()) {
+        payload.full_name = full_name.trim();
       }
 
-      localStorage.setItem("token", data.access_token);
-      document.cookie = `token=${data.access_token}; path=/; max-age=86400`;
-      setSuccess("Account created successfully! Welcome aboard!");
-      await checkAuth();
+      const response = await fetch(API_ENDPOINTS.auth.register, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data: BackendResponse<User> = await response.json();
+
+      if (!response.ok || data.code !== 200) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      setSuccess(data.message || "Account created successfully! Please login.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
       throw err;
