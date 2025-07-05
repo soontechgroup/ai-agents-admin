@@ -16,20 +16,12 @@ export default function RegisterPage() {
   const { register, error, success, loading, resetMessages } = useAuth();
   const router = useRouter();
 
-  // Debug success state changes
-  useEffect(() => {
-    console.log("Success state changed:", success);
-  }, [success]);
-
   useEffect(() => {
     resetMessages();
   }, [resetMessages]);
 
   useEffect(() => {
     if (success) {
-      console.log(
-        "Registration successful, redirecting to login with success message..."
-      );
       // Redirect immediately with success message
       router.push("/login?success=registered");
     }
@@ -73,16 +65,8 @@ export default function RegisterPage() {
     }
 
     try {
-      console.log("Submitting registration form with:", {
-        username,
-        email,
-        fullName,
-        passwordLength: password.length,
-      });
-
       await register(username, email, password, fullName);
     } catch (error) {
-      console.error("Registration form error:", error);
       // Error is handled in the auth context
     }
   };

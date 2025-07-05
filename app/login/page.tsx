@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
