@@ -4,7 +4,7 @@ This repository contains the admin interface for managing AI agents.
 
 ## Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v20 or higher)
 - npm (v9 or higher)
 - Git
 
@@ -21,9 +21,9 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 ### Using Scripts (Recommended)
 
 #### Windows
-```bash
+```powershell
 # From the root directory
-scripts/start-app.bat
+.\scripts\start-app.ps1
 ```
 
 #### Linux/Mac
