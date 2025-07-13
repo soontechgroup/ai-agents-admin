@@ -20,13 +20,6 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ### Using Scripts (Recommended)
 
-#### Windows
-```powershell
-# From the root directory
-.\scripts\start-app.ps1
-```
-
-#### Linux/Mac
 ```bash
 # From the root directory
 chmod +x scripts/start-app.sh
