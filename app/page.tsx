@@ -37,7 +37,7 @@ export default function HomePage() {
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="px-4 py-5 sm:p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Welcome back, {user?.name}!
+                Welcome back, {user?.full_name || user?.username}!
               </h2>
               <p className="text-gray-600">
                 You are logged in with {user?.email}
