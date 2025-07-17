@@ -1,3 +1,146 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 自定义CSS变量 */
+:root {
+  /* 背景色系 */
+  --bg-primary: #0F1923;
+  --bg-secondary: #1A2332;
+  --bg-tertiary: #242B3D;
+  --bg-sidebar: #0D1520;
+  --bg-overlay: rgba(15, 25, 35, 0.85);
+  
+  /* 强调色 */
+  --accent-primary: #00B8D9;
+  --accent-secondary: #6B5CE6;
+  --accent-gradient: linear-gradient(135deg, #00B8D9 0%, #6B5CE6 100%);
+  
+  /* 文字色 */
+  --text-primary: #E8EAED;
+  --text-secondary: #A8B2C1;
+  --text-muted: #6B7280;
+  --text-disabled: #4B5563;
+  
+  /* 功能色 */
+  --success: #00D48A;
+  --warning: #FFB547;
+  --error: #FF5252;
+  --info: #00D9FF;
+  
+  /* 边框和分割线 */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.15);
+  --border-focus: var(--accent-primary);
+  
+  /* 状态背景色 */
+  --state-info-bg: rgba(0, 217, 255, 0.1);
+  --state-success-bg: rgba(0, 212, 138, 0.1);
+  --state-warning-bg: rgba(255, 181, 71, 0.1);
+  --state-danger-bg: rgba(255, 82, 82, 0.1);
+  
+  /* 阴影 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  /* 发光效果 */
+  --glow-sm: 0 0 0 3px rgba(0, 184, 217, 0.15);
+  --glow-md: 0 0 0 3px rgba(0, 184, 217, 0.25);
+  
+  /* 动画 */
+  --duration-instant: 75ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 登录页面专用样式 */
+.login-page {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* 网格背景 */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 184, 217, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 184, 217, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+/* 动态背景元素 */
+.bg-decoration {
+  position: fixed;
+  pointer-events: none;
+}
+
+.bg-decoration-1 {
+  top: -200px;
+  left: -200px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 184, 217, 0.1) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: float 20s ease-in-out infinite;
+}
+
+.bg-decoration-2 {
+  bottom: -150px;
+  right: -150px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(107, 92, 230, 0.1) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
+}
+
+/* 加载动画 */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 按钮波纹效果 */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-slow), height var(--duration-slow);
+}
+
+.btn-ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
