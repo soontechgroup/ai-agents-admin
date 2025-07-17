@@ -27,17 +27,7 @@ export default function LoginClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const successParam = searchParams.get("success");
-    if (successParam === "registered") {
-      setNotification({
-        show: true,
-        type: 'success',
-        message: '注册成功！请使用新账户登录'
-      });
-      router.replace("/login");
-    }
-  }, [searchParams, router]);
+  // 移除注册相关的useEffect
 
   useEffect(() => {
     if (error) {
@@ -72,6 +62,56 @@ export default function LoginClient() {
 
   const closeNotification = () => {
     setNotification({ ...notification, show: false });
+  };
+
+  // 输入框聚焦处理器
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.style.borderColor = 'var(--accent-primary)';
+    e.target.style.boxShadow = 'var(--glow-sm)';
+    e.target.style.background = 'var(--bg-tertiary)';
+  };
+
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.style.borderColor = 'var(--border-default)';
+    e.target.style.boxShadow = 'none';
+    e.target.style.background = 'var(--bg-secondary)';
+  };
+
+  // 按钮悬停处理器
+  const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!loading) {
+      e.currentTarget.style.transform = 'translateY(-2px)';
+      e.currentTarget.style.boxShadow = '0 5px 15px rgba(0, 184, 217, 0.3)';
+    }
+  };
+
+  const handleButtonLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!loading) {
+      e.currentTarget.style.transform = 'translateY(0)';
+      e.currentTarget.style.boxShadow = 'none';
+    }
+  };
+
+  // 辅助按钮悬停处理器
+  const handleSecondaryButtonHover = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.background = 'var(--bg-tertiary)';
+    e.currentTarget.style.borderColor = 'var(--accent-primary)';
+    e.currentTarget.style.color = 'var(--text-primary)';
+  };
+
+  const handleSecondaryButtonLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.background = 'var(--bg-secondary)';
+    e.currentTarget.style.borderColor = 'var(--border-default)';
+    e.currentTarget.style.color = 'var(--text-secondary)';
+  };
+
+  // 切换按钮悬停处理器
+  const handleToggleHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.style.color = 'var(--text-secondary)';
+  };
+
+  const handleToggleLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.style.color = 'var(--text-muted)';
   };
 
   return (
@@ -113,10 +153,7 @@ export default function LoginClient() {
                 用户名
               </label>
               <div className="relative">
-                <span 
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lg pointer-events-none"
-                  style={{ color: 'var(--text-muted)' }}
-                >
+                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lg input-icon">
                   👤
                 </span>
                 <input
@@ -126,22 +163,9 @@ export default function LoginClient() {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   placeholder="请输入用户名或邮箱"
-                  className="w-full pl-12 pr-4 py-3 rounded-lg border text-sm transition-all duration-300 focus:outline-none"
-                  style={{
-                    background: 'var(--bg-secondary)',
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--text-primary)'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--accent-primary)';
-                    e.target.style.boxShadow = 'var(--glow-sm)';
-                    e.target.style.background = 'var(--bg-tertiary)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'var(--border-default)';
-                    e.target.style.boxShadow = 'none';
-                    e.target.style.background = 'var(--bg-secondary)';
-                  }}
+                  className="input-field w-full pl-12 pr-4 py-3 rounded-lg text-sm"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
                 />
               </div>
             </div>
@@ -156,10 +180,7 @@ export default function LoginClient() {
                 密码
               </label>
               <div className="relative">
-                <span 
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lg pointer-events-none"
-                  style={{ color: 'var(--text-muted)' }}
-                >
+                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lg input-icon">
                   🔒
                 </span>
                 <input
@@ -169,34 +190,16 @@ export default function LoginClient() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="请输入密码"
-                  className="w-full pl-12 pr-12 py-3 rounded-lg border text-sm transition-all duration-300 focus:outline-none"
-                  style={{
-                    background: 'var(--bg-secondary)',
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--text-primary)'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--accent-primary)';
-                    e.target.style.boxShadow = 'var(--glow-sm)';
-                    e.target.style.background = 'var(--bg-tertiary)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'var(--border-default)';
-                    e.target.style.boxShadow = 'none';
-                    e.target.style.background = 'var(--bg-secondary)';
-                  }}
+                  className="input-field w-full pl-12 pr-12 py-3 rounded-lg text-sm"
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
                 />
                 <button
                   type="button"
                   onClick={togglePassword}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 transition-colors duration-300"
-                  style={{ color: 'var(--text-muted)' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--text-secondary)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--text-muted)';
-                  }}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 toggle-btn"
+                  onMouseEnter={handleToggleHover}
+                  onMouseLeave={handleToggleLeave}
                 >
                   <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
                     {showPassword ? (
@@ -232,9 +235,8 @@ export default function LoginClient() {
                 </label>
               </div>
               <Link
-                href="#"
-                className="text-sm transition-opacity duration-300 hover:opacity-80 hover:underline"
-                style={{ color: 'var(--accent-primary)' }}
+                href="/forgot-password"
+                className="text-sm link-primary"
               >
                 忘记密码？
               </Link>
@@ -244,22 +246,9 @@ export default function LoginClient() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-ripple w-full py-3.5 rounded-lg text-white font-semibold text-base cursor-pointer transition-all duration-300 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                background: 'var(--accent-gradient)',
-              }}
-              onMouseEnter={(e) => {
-                if (!loading) {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 5px 15px rgba(0, 184, 217, 0.3)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!loading) {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }
-              }}
+              className="btn-ripple btn-primary w-full py-3.5 rounded-lg text-base cursor-pointer relative overflow-hidden"
+              onMouseEnter={handleButtonHover}
+              onMouseLeave={handleButtonLeave}
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -295,45 +284,19 @@ export default function LoginClient() {
           {/* 其他登录方式 */}
           <div className="flex gap-4">
             <Link
-              href="#"
-              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border text-sm transition-all duration-300"
-              style={{
-                background: 'var(--bg-secondary)',
-                borderColor: 'var(--border-default)',
-                color: 'var(--text-secondary)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--bg-tertiary)';
-                e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--bg-secondary)';
-                e.currentTarget.style.borderColor = 'var(--border-default)';
-                e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
+              href="/login/phone"
+              className="btn-secondary flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm"
+              onMouseEnter={handleSecondaryButtonHover}
+              onMouseLeave={handleSecondaryButtonLeave}
             >
               <span>📱</span>
               <span>手机号登录</span>
             </Link>
             <Link
-              href="#"
-              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border text-sm transition-all duration-300"
-              style={{
-                background: 'var(--bg-secondary)',
-                borderColor: 'var(--border-default)',
-                color: 'var(--text-secondary)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--bg-tertiary)';
-                e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                e.currentTarget.style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--bg-secondary)';
-                e.currentTarget.style.borderColor = 'var(--border-default)';
-                e.currentTarget.style.color = 'var(--text-secondary)';
-              }}
+              href="/login/sso"
+              className="btn-secondary flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm"
+              onMouseEnter={handleSecondaryButtonHover}
+              onMouseLeave={handleSecondaryButtonLeave}
             >
               <span>🔑</span>
               <span>SSO登录</span>

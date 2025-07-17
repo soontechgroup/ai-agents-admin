@@ -144,3 +144,81 @@
   width: 300px;
   height: 300px;
 }
+
+/* 输入框样式 */
+.input-field {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  transition: all var(--duration-normal);
+}
+
+.input-field:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-sm);
+  background: var(--bg-tertiary);
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+/* 图标样式 */
+.input-icon {
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+  font-weight: 600;
+  transition: all var(--duration-normal);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 184, 217, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 辅助按钮样式 */
+.btn-secondary {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  transition: all var(--duration-normal);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* 链接样式 */
+.link-primary {
+  color: var(--accent-primary);
+  transition: opacity var(--duration-normal);
+}
+
+.link-primary:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* 切换按钮样式 */
+.toggle-btn {
+  color: var(--text-muted);
+  transition: color var(--duration-normal);
+}
+
+.toggle-btn:hover {
+  color: var(--text-secondary);
+}
