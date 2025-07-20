@@ -41,4 +41,8 @@ lerna-debug.log*
 # Next.js
 /.next/
 /out/
-next-env.d.ts 
+next-env.d.ts
+
+# AI Assistant files
+.claude/
+.serena/ 
