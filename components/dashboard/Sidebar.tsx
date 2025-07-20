@@ -110,7 +110,7 @@ export function Sidebar({ collapsed, mobileOpen, onToggle, onMobileToggle }: Sid
             <span className="nav-arrow">▶</span>
           </div>
           <div className="nav-submenu">
-            {item.children.map(child => (
+            {item.children?.map(child => (
               <Link
                 key={child.id}
                 href={child.href!}
