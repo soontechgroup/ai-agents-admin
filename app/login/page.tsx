@@ -3,9 +3,19 @@ import LoginClient from "./LoginClient";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <Suspense fallback={<div>Loading...</div>}>
+    <div className="login-page relative">
+      {/* 背景装饰 */}
+      <div className="grid-bg"></div>
+      <div className="bg-decoration bg-decoration-1"></div>
+      <div className="bg-decoration bg-decoration-2"></div>
+      
+      {/* 登录容器 */}
+      <div className="flex w-full h-screen relative z-10">
+        <Suspense fallback={
+          <div className="flex items-center justify-center w-full h-full">
+            <div className="text-white">Loading...</div>
+          </div>
+        }>
           <LoginClient />
         </Suspense>
       </div>
